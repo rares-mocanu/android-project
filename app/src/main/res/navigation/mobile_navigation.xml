@@ -12,14 +12,26 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.project.latino.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_schools"
+        android:name="com.project.latino.ui.home.HomeFragment"
+        android:label="@string/title_schools"
+        tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.project.latino.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_clubs"
+        android:name="com.project.latino.ui.home.HomeFragment"
+        android:label="@string/title_clubs"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_events"
+        android:name="com.project.latino.ui.home.HomeFragment"
+        android:label="@string/title_events"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_map"
+        android:name="com.project.latino.ui.home.HomeFragment"
+        android:label="@string/title_map"
+        tools:layout="@layout/fragment_home" />
 </navigation>
