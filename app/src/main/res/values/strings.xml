@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">LatinoCommunity</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_schools">Schools</string>
+    <string name="title_clubs">Clubs</string>
+    <string name="title_events">Events</string>
+    <string name="title_map">Map</string>
 </resources>
