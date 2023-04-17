@@ -36,19 +36,19 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/trainersLabel"
+        android:id="@+id/eventsLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="8dp"
-        android:text="Trainers:"
-        app:layout_constraintBottom_toTopOf="@+id/trainerList"
+        android:text="Events:"
+        app:layout_constraintBottom_toTopOf="@+id/clubEventList"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/trainerList"
+        android:id="@+id/clubEventList"
         android:layout_width="409dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="1dp"

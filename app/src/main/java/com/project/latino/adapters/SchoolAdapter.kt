@@ -29,11 +29,12 @@ class SchoolAdapter(private val schoollist: ArrayList<SchoolModel>) : RecyclerVi
 
     override fun onBindViewHolder(holder: SchoolViewHolder, position: Int) {
     val currentschool = schoollist[position]
+
     holder.nameView.text = currentschool.name
     holder.imageView.setImageResource(currentschool.logo)
-        val layoutManager = LinearLayoutManager(holder.trainerList.context)
-        holder.trainerList.layoutManager=layoutManager
-        holder.trainerList.adapter= TrainerAdapter(schoollist[position].trainers as ArrayList<String>)
+    val layoutManager = LinearLayoutManager(holder.trainerList.context)
+    holder.trainerList.layoutManager=layoutManager
+    holder.trainerList.adapter= TrainerAdapter(currentschool.trainers)
     }
 
 }

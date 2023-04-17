@@ -1,9 +1,14 @@
 package com.project.latino.adapters
 
+import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.project.latino.MainActivity
+import com.project.latino.SchoolActivity
 import com.project.latino.databinding.HomepageItemBinding
 import com.project.latino.models.HPItemModel
 
@@ -27,7 +32,10 @@ class CustomAdapter(
                 holder.image.context, item.image
             )
         )
-
+        holder.image.setOnClickListener(View.OnClickListener {
+            val intent  = Intent(holder.image.context,SchoolActivity::class.java)
+            startActivity(holder.image.context,intent,null)
+        })
         holder.title.text = item.title
         holder.constraint.setOnClickListener {
             onItemClick(item)

@@ -7,23 +7,23 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.project.latino.R
 
-class TrainerAdapter(private val trainerList: ArrayList<String>) : RecyclerView.Adapter<TrainerAdapter.ClubEventViewHolder> (){
+class ClubEventAdapter(private val eventList: ArrayList<String>) : RecyclerView.Adapter<ClubEventAdapter.ClubEventViewHolder> () {
 
-    class ClubEventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val textview : TextView = itemView.findViewById(R.id.trainerNameView)
+    class ClubEventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val textview: TextView = itemView.findViewById(R.id.clubEventNameView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClubEventViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.traineritemlayout,parent,false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.clubeventitemlayout, parent, false)
         return ClubEventViewHolder(view)
     }
 
     override fun getItemCount(): Int {
-        return trainerList.size
+        return eventList.size
     }
 
     override fun onBindViewHolder(holder: ClubEventViewHolder, position: Int) {
-        holder.textview.text=trainerList[position]
+        holder.textview.text = eventList[position]
     }
-
 }
