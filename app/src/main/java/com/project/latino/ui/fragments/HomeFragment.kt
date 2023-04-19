@@ -44,12 +44,16 @@ class HomeFragment : Fragment() {
         findNavController().popBackStack()
         when (model.title) {
             "Schools" -> {
-                findNavController().navigate(R.id.navigation_clubs)
+                findNavController().navigate(R.id.navigation_schools)
                 activity?.findViewById<BottomNavigationView>(R.id.nav_view)?.menu?.findItem(R.id.navigation_schools)?.isChecked = true
             }
             "Clubs" -> {
                 findNavController().navigate(R.id.navigation_clubs)
                 activity?.findViewById<BottomNavigationView>(R.id.nav_view)?.menu?.findItem(R.id.navigation_clubs)?.isChecked = true
+            }
+            "Events" -> {
+                findNavController().navigate(R.id.navigation_events)
+                activity?.findViewById<BottomNavigationView>(R.id.nav_view)?.menu?.findItem(R.id.navigation_events)?.isChecked = true
             }
         }
     }
