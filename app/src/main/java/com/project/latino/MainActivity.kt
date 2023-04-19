@@ -35,22 +35,6 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_home, R.id.navigation_schools, R.id.navigation_clubs,  R.id.navigation_events,  R.id.navigation_map))
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        var navschoolbutton : View =findViewById<View>(R.id.navigation_schools)
-        navschoolbutton.setOnClickListener{
-            val intent = Intent(this,SchoolActivity::class.java)
-            startActivity(intent)
-        }
-        var navhomebutton : View =findViewById<View>(R.id.navigation_home)
-        navhomebutton.setOnClickListener{
-            val intent = Intent(this,MainActivity::class.java)
-            startActivity(intent)
-        }
-        var navclubsbutton : View =findViewById<View>(R.id.navigation_clubs)
-        navclubsbutton.setOnClickListener{
-            val intent = Intent(this,ClubsActivity::class.java)
-            startActivity(intent)
-        }
-
     }
 
     override fun onSupportNavigateUp(): Boolean {

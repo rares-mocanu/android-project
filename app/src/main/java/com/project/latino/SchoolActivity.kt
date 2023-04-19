@@ -34,21 +34,21 @@ class SchoolActivity : AppCompatActivity() {
 
 
 
-        var navschoolbutton : View =findViewById<View>(R.id.navigation_schools)
-        navschoolbutton.setOnClickListener{
-            val intent = Intent(this,SchoolActivity::class.java)
-            startActivity(intent)
-        }
-        var navhomebutton : View =findViewById<View>(R.id.navigation_home)
-        navhomebutton.setOnClickListener{
-            val intent = Intent(this,MainActivity::class.java)
-            startActivity(intent)
-        }
-        var navclubsbutton : View =findViewById<View>(R.id.navigation_clubs)
-        navclubsbutton.setOnClickListener{
-            val intent = Intent(this,ClubsActivity::class.java)
-            startActivity(intent)
-        }
+//        var navschoolbutton : View =findViewById<View>(R.id.navigation_schools)
+//        navschoolbutton.setOnClickListener{
+//            val intent = Intent(this,SchoolActivity::class.java)
+//            startActivity(intent)
+//        }
+//        var navhomebutton : View =findViewById<View>(R.id.navigation_home)
+//        navhomebutton.setOnClickListener{
+//            val intent = Intent(this,MainActivity::class.java)
+//            startActivity(intent)
+//        }
+//        var navclubsbutton : View =findViewById<View>(R.id.navigation_clubs)
+//        navclubsbutton.setOnClickListener{
+//            val intent = Intent(this,ClubsActivity::class.java)
+//            startActivity(intent)
+//        }
 
     }
 
