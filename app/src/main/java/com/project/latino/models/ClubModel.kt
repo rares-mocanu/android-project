@@ -1,8 +1,11 @@
 package com.project.latino.models
 
 import androidx.room.ColumnInfo
+import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+
+@Entity(tableName="club_item")
 data class ClubModel(
     @PrimaryKey(autoGenerate = true)
     var clubID: Int,

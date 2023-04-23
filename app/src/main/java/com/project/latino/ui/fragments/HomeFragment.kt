@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.latino.MainActivity
 import com.project.latino.R
-import com.project.latino.SchoolActivity
+import com.project.latino.ui.fragments.SchoolFragment
 import com.project.latino.adapters.CustomAdapter
 import com.project.latino.databinding.FragmentHomeBinding
 import com.project.latino.models.HPItemModel
