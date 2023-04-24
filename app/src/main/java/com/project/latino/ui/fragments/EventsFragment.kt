@@ -1,14 +1,15 @@
 package com.project.latino.ui.fragments
 
+import android.app.NotificationManager
+import android.content.Context
 import com.project.latino.adapters.EventAdapter
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.project.latino.R
@@ -42,7 +43,7 @@ class EventFragment : Fragment(), EventAdapter.OnShareButtonClickListener {
         val date3 = Calendar.getInstance()
 
         date1.set(2024, Calendar.JUNE, 20)
-        date2.set(2023, Calendar.APRIL, 12)
+        date2.set(2023, Calendar.APRIL, 24)
         date3.set(2023, Calendar.DECEMBER, 6)
 
         val time1 = Calendar.getInstance()
@@ -60,6 +61,26 @@ class EventFragment : Fragment(), EventAdapter.OnShareButtonClickListener {
         val sortedEvents = ArrayList(events.sortedBy { it.eventDate })
 
         eventRecyclerView.adapter = EventAdapter(sortedEvents)
+
+        // Send notification if current date matches an event date
+        val currentDate = Calendar.getInstance()
+        for (event in events) {
+            if (currentDate.get(Calendar.YEAR) == event.eventDate.get(Calendar.YEAR) &&
+                currentDate.get(Calendar.MONTH) == event.eventDate.get(Calendar.MONTH) &&
+                currentDate.get(Calendar.DAY_OF_MONTH) == event.eventDate.get(Calendar.DAY_OF_MONTH)
+            ) {
+                val notificationManager =
+                    requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                val notificationId = event.id
+                val builder = NotificationCompat.Builder(requireContext(), "MyAppChannel")
+                    .setSmallIcon(R.drawable.ic_home_black_24dp)
+                    .setContentTitle("Don't forget to party!")
+                    .setContentText("${event.name} is happening today!")
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setAutoCancel(true)
+                notificationManager.notify(notificationId, builder.build())
+            }
+        }
     }
 
     override fun onShareButtonClick(event: EventModel) {
