@@ -2,19 +2,22 @@ package com.project.latino.ui.fragments
 
 import com.project.latino.adapters.EventAdapter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.project.latino.R
 import com.project.latino.models.EventModel
 import com.project.latino.databinding.FragmentEventBinding
 import java.util.Calendar
 
 
-class EventFragment : Fragment() {
+class EventFragment : Fragment(), EventAdapter.OnShareButtonClickListener {
 
     private lateinit var binding: FragmentEventBinding
 
@@ -53,9 +56,31 @@ class EventFragment : Fragment() {
         events.add(EventModel(2, date2, time1,"Event 2", "Details of Event 2", pictures, "Club B"))
         events.add(EventModel(3, date3, time1,"Event 3", "Details of Event 3", pictures, "Club C"))
 
+
         val sortedEvents = ArrayList(events.sortedBy { it.eventDate })
 
         eventRecyclerView.adapter = EventAdapter(sortedEvents)
     }
 
+    override fun onShareButtonClick(event: EventModel) {
+        val bottomSheet = LayoutInflater.from(context).inflate(R.layout.bottom_sheet, null)
+
+        val dialog = BottomSheetDialog(requireContext())
+        dialog.setContentView(bottomSheet)
+
+        val shareDetailsButton = bottomSheet.findViewById<Button>(R.id.btn_share_details)
+        shareDetailsButton.setOnClickListener {
+            // Handle share details button click here
+            dialog.dismiss()
+        }
+
+        val sharePhotosButton = bottomSheet.findViewById<Button>(R.id.btn_share_photos)
+        sharePhotosButton.setOnClickListener {
+            // Handle share photos button click here
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
 }
+
