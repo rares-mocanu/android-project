@@ -23,6 +23,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.project.latino.databinding.ActivityMainBinding
+import com.project.latino.ui.fragments.EventFragment
 import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
@@ -60,57 +61,28 @@ class MainActivity : AppCompatActivity() {
             notificationManager.createNotificationChannel(channel)
         }
 
+        var sortedEvents = EventFragment().getEvents()
 
-        // Create a notification channel for Android Oreo and higher versions
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "MyApp"
-            val descriptionText = "MyApp Notifications"
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel("MyAppChannel", name, importance).apply {
-                description = descriptionText
-                enableLights(true)
-                lightColor = Color.RED
-                enableVibration(true)
+        // Send notification if current date matches an event date
+        val currentDate = Calendar.getInstance()
+        for (event in sortedEvents) {
+            if (currentDate.get(Calendar.YEAR) == event.eventDate.get(Calendar.YEAR) &&
+                currentDate.get(Calendar.MONTH) == event.eventDate.get(Calendar.MONTH) &&
+                currentDate.get(Calendar.DAY_OF_MONTH) == event.eventDate.get(Calendar.DAY_OF_MONTH)
+            ) {
+                val notificationManager =
+                    getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                val notificationId = event.id
+                val builder = NotificationCompat.Builder(this, "MyAppChannel")
+                    .setSmallIcon(R.drawable.ic_home_black_24dp)
+                    .setContentTitle("Don't forget to party!")
+                    .setContentText("${event.name} is happening today!")
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setAutoCancel(true)
+                notificationManager.notify(notificationId, builder.build())
             }
-            val notificationManager: NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
         }
 
-        // Set the notification time to 8:00 AM
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = System.currentTimeMillis()
-        calendar.set(Calendar.HOUR_OF_DAY, 8)
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
-
-        // Create a deep link to the Events page
-        val deepLink = Uri.parse("myapp://events")
-
-        // Create an intent that opens the Events page when the notification is clicked
-        val intent = Intent(Intent.ACTION_VIEW, deepLink)
-        val pendingIntent = PendingIntent.getActivity(
-            this,
-            0,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-        // Schedule the notification to be shown at the specified time
-        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY,
-            pendingIntent
-        )
-
-        // Create a notification
-        val builder = NotificationCompat.Builder(this, "MyAppChannel")
-            .setSmallIcon(R.drawable.ic_home_black_24dp)
-            .setContentTitle("MyApp Notification")
-            .setContentText("There is an upcoming event today!")
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
 
     }
 
