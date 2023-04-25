@@ -52,7 +52,7 @@ class HomeFragment : Fragment() {
                 activity?.findViewById<BottomNavigationView>(R.id.nav_view)?.menu?.findItem(R.id.navigation_clubs)?.isChecked = true
             }
             "Events" -> {
-                findNavController().navigate(R.id.navigation_events)
+                 findNavController().navigate(R.id.navigation_events)
                 activity?.findViewById<BottomNavigationView>(R.id.nav_view)?.menu?.findItem(R.id.navigation_events)?.isChecked = true
             }
         }

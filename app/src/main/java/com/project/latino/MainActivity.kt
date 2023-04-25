@@ -19,6 +19,7 @@ import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.core.app.NotificationCompat
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
@@ -63,6 +64,17 @@ class MainActivity : AppCompatActivity() {
 
         var sortedEvents = EventFragment().getEvents()
 
+        // Check if the activity was started by clicking on the notification
+        val notificationClick = intent.getBooleanExtra("NOTIFICATION_CLICK", false)
+
+        if (notificationClick) {
+            // Navigate to the Events fragment
+            navController.navigate(R.id.navigation_events)
+        } else {
+            // Navigate to the Home fragment
+            navController.navigate(R.id.navigation_home)
+        }
+
         // Send notification if current date matches an event date
         val currentDate = Calendar.getInstance()
         for (event in sortedEvents) {
@@ -70,21 +82,31 @@ class MainActivity : AppCompatActivity() {
                 currentDate.get(Calendar.MONTH) == event.eventDate.get(Calendar.MONTH) &&
                 currentDate.get(Calendar.DAY_OF_MONTH) == event.eventDate.get(Calendar.DAY_OF_MONTH)
             ) {
-                val notificationManager =
-                    getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                val notificationId = event.id
+                // Create an Intent to open MainActivity when the notification is clicked
+                val intent = Intent(this, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+
+                intent.putExtra("NOTIFICATION_CLICK", true)
+
+                val pendingIntent = PendingIntent.getActivity(
+                    this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+
+
                 val builder = NotificationCompat.Builder(this, "MyAppChannel")
                     .setSmallIcon(R.drawable.ic_home_black_24dp)
                     .setContentTitle("Don't forget to party!")
                     .setContentText("${event.name} is happening today!")
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setContentIntent(pendingIntent)
                     .setAutoCancel(true)
+
+                val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                val notificationId = event.id
                 notificationManager.notify(notificationId, builder.build())
             }
         }
-
-
     }
+
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
