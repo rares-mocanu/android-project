@@ -69,10 +69,13 @@ class MainActivity : AppCompatActivity() {
 
         if (notificationClick) {
             // Navigate to the Events fragment
+            navController.popBackStack()
             navController.navigate(R.id.navigation_events)
         } else {
             // Navigate to the Home fragment
+            //doesnt work
             navController.navigate(R.id.navigation_home)
+            //doesnt work
         }
 
         // Send notification if current date matches an event date
