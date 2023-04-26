@@ -7,10 +7,9 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.project.latino.MainActivity
-import com.project.latino.SchoolActivity
 import com.project.latino.databinding.HomepageItemBinding
 import com.project.latino.models.HPItemModel
+import com.project.latino.ui.fragments.SchoolFragment
 
 class CustomAdapter(
     private val list: List<HPItemModel>,
@@ -33,7 +32,7 @@ class CustomAdapter(
             )
         )
         holder.image.setOnClickListener(View.OnClickListener {
-            val intent  = Intent(holder.image.context,SchoolActivity::class.java)
+            val intent  = Intent(holder.image.context,SchoolFragment::class.java)
             startActivity(holder.image.context,intent,null)
         })
         holder.title.text = item.title
