@@ -11,8 +11,12 @@ import android.widget.TextView
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.project.latino.AppDatabase
 import com.project.latino.R
 import com.project.latino.models.EventModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -82,7 +86,12 @@ class EventAdapter(private val eventList: ArrayList<EventModel>) : RecyclerView.
 
         holder.nameView.text = currentEvent.name
         holder.detailsView.text = currentEvent.details
-        holder.clubView.text = currentEvent.club
+        CoroutineScope(Dispatchers.Main).launch{
+            val instance= AppDatabase.getInstance(holder.itemView.context)
+            var club= instance?.clubDao()!!.getClubOfId(currentEvent.club)
+            holder.clubView.text = club[0].name
+
+        }
 
         // Format the event date and time as strings
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())

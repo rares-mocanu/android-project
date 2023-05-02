@@ -6,8 +6,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.project.latino.R
+import com.project.latino.models.EventModel
 
-class ClubEventAdapter(private val eventList: ArrayList<String>) : RecyclerView.Adapter<ClubEventAdapter.ClubEventViewHolder> () {
+class ClubEventAdapter(private val eventList: ArrayList<EventModel>) : RecyclerView.Adapter<ClubEventAdapter.ClubEventViewHolder> () {
 
     class ClubEventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textview: TextView = itemView.findViewById(R.id.clubEventNameView)
@@ -24,6 +25,6 @@ class ClubEventAdapter(private val eventList: ArrayList<String>) : RecyclerView.
     }
 
     override fun onBindViewHolder(holder: ClubEventViewHolder, position: Int) {
-        holder.textview.text = eventList[position]
+        holder.textview.text = eventList[position].name
     }
 }

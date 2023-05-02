@@ -24,7 +24,11 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.project.latino.databinding.ActivityMainBinding
+import com.project.latino.models.EventModel
 import com.project.latino.ui.fragments.EventFragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
@@ -62,7 +66,6 @@ class MainActivity : AppCompatActivity() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        var sortedEvents = EventFragment().getEvents()
 
         // Check if the activity was started by clicking on the notification
         val notificationClick = intent.getBooleanExtra("NOTIFICATION_CLICK", false)
@@ -80,7 +83,12 @@ class MainActivity : AppCompatActivity() {
 
         // Send notification if current date matches an event date
         val currentDate = Calendar.getInstance()
-        for (event in sortedEvents) {
+        var sortedEvents = ArrayList<EventModel>()
+        CoroutineScope(Dispatchers.Main).launch {
+            val instance = AppDatabase.getInstance(this@MainActivity)
+            sortedEvents = ArrayList<EventModel>(instance?.eventDao()!!.getAllEvents())
+        }
+            for (event in sortedEvents) {
             if (currentDate.get(Calendar.YEAR) == event.eventDate.get(Calendar.YEAR) &&
                 currentDate.get(Calendar.MONTH) == event.eventDate.get(Calendar.MONTH) &&
                 currentDate.get(Calendar.DAY_OF_MONTH) == event.eventDate.get(Calendar.DAY_OF_MONTH)

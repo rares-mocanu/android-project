@@ -12,9 +12,15 @@ import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.project.latino.AppDatabase
 import com.project.latino.R
+import com.project.latino.adapters.ClubsAdapter
 import com.project.latino.models.EventModel
 import com.project.latino.databinding.FragmentEventBinding
+import com.project.latino.models.ClubModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 
@@ -22,30 +28,6 @@ class EventFragment : Fragment(), EventAdapter.OnShareButtonClickListener {
 
     private lateinit var binding: FragmentEventBinding
 
-    private fun createEvents() : ArrayList<EventModel>{
-        val date1 = Calendar.getInstance()
-        val date2 = Calendar.getInstance()
-        val date3 = Calendar.getInstance()
-
-        date1.set(2024, Calendar.JUNE, 20)
-        date2.set(2023, Calendar.APRIL, 25)
-        date3.set(2023, Calendar.DECEMBER, 6)
-
-        val time1 = Calendar.getInstance()
-        time1.set(Calendar.HOUR_OF_DAY, 20)
-        time1.set(Calendar.MINUTE, 0)
-        time1.set(Calendar.SECOND, 0)
-
-        val events = ArrayList<EventModel>(100)
-        val pictures = listOf(R.drawable.rio, R.drawable.rio, R.drawable.rio)
-        events.add(EventModel(1, date1, time1,"Event 1", "Details of Event 1", pictures, "Club A"))
-        events.add(EventModel(2, date2, time1,"Event 2", "Details of Event 2", pictures, "Club B"))
-        events.add(EventModel(3, date3, time1,"Event 3", "Details of Event 3", pictures, "Club C"))
-
-
-        val sortedEvents = ArrayList(events.sortedBy { it.eventDate })
-        return sortedEvents
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,9 +45,45 @@ class EventFragment : Fragment(), EventAdapter.OnShareButtonClickListener {
         val layoutManager = LinearLayoutManager(requireContext())
         eventRecyclerView.layoutManager = layoutManager
 
-        val sortedEvents = createEvents()
+        CoroutineScope(Dispatchers.Main).launch{
+            val instance= AppDatabase.getInstance(requireContext())
+            var sortedEvents= ArrayList<EventModel>(instance?.eventDao()!!.getAllEvents())
+            var clubsList= ArrayList<ClubModel>(instance?.clubDao()!!.getAllClubs())
+            if(sortedEvents.size<4)
+            {
+                sortedEvents.clear()
+                instance.eventDao().deleteAll()
+                val pictures = ArrayList(listOf(R.drawable.rio, R.drawable.rio, R.drawable.rio))
+                var date=Calendar.getInstance()
+                var time=Calendar.getInstance()
+                time.set(Calendar.HOUR_OF_DAY, 20)
+                time.set(Calendar.MINUTE, 0)
+                time.set(Calendar.SECOND, 0)
+                date.set(2024, Calendar.JUNE, 20)
+                sortedEvents.add(
+                    EventModel(1,date,time,"Palladium Party","details",pictures,clubsList[0].clubID)
+                )
+                date.set(2024, Calendar.JUNE, 26)
+                sortedEvents.add(
+                    EventModel(2,date,time,"Kiz Party","details",pictures,clubsList[0].clubID)
+                )
+                date.set(2024, Calendar.JUNE, 28)
+                sortedEvents.add(
+                    EventModel(3,date,time,"Latin Experience","details",pictures,clubsList[1].clubID)
+                )
+                date.set(2024, Calendar.JULY, 4)
+                sortedEvents.add(
+                    EventModel(4,date,time,"Q-Ban Project","details",pictures,clubsList[1].clubID)
+                )
+                for(e in sortedEvents)
+                {
+                    println(e.id)
+                    instance.eventDao().insertEvent(e)
+                }
+            }
+            eventRecyclerView.adapter = EventAdapter(sortedEvents)
+        }
 
-        eventRecyclerView.adapter = EventAdapter(sortedEvents)
     }
 
     override fun onShareButtonClick(event: EventModel) {
@@ -89,9 +107,6 @@ class EventFragment : Fragment(), EventAdapter.OnShareButtonClickListener {
         dialog.show()
     }
 
-    public fun getEvents() : ArrayList<EventModel>{
-        return createEvents()
-    }
 
 
 }
