@@ -12,6 +12,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -87,6 +88,8 @@ class MainActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             val instance = AppDatabase.getInstance(this@MainActivity)
             sortedEvents = ArrayList<EventModel>(instance?.eventDao()!!.getAllEvents())
+            Log.d("TAG", "sortedEvents: $sortedEvents")
+
         }
             for (event in sortedEvents) {
             if (currentDate.get(Calendar.YEAR) == event.eventDate.get(Calendar.YEAR) &&
