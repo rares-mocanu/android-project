@@ -49,7 +49,7 @@ class EventFragment : Fragment(), EventAdapter.OnShareButtonClickListener {
             val instance= AppDatabase.getInstance(requireContext())
             var sortedEvents= ArrayList<EventModel>(instance?.eventDao()!!.getAllEvents())
             var clubsList= ArrayList<ClubModel>(instance?.clubDao()!!.getAllClubs())
-            if(sortedEvents.size<5)
+            if(true)
             {
                 sortedEvents.clear()
                 instance.eventDao().deleteAll()
