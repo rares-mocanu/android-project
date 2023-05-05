@@ -42,6 +42,7 @@ class HomeFragment : Fragment() {
 
     private fun onClick(model: HPItemModel) {
         findNavController().popBackStack()
+        findNavController().popBackStack()
         when (model.title) {
             "Schools" -> {
                 findNavController().navigate(R.id.navigation_schools)
