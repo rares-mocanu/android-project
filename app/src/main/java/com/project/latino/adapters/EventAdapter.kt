@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -40,6 +41,8 @@ class EventAdapter(private val eventList: ArrayList<EventModel>) : RecyclerView.
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.fragment_event, parent, false)
         val viewHolder = EventViewHolder(itemView)
+        val context = itemView.context
+
 
         viewHolder.shareButton.setOnClickListener {
             val position = viewHolder.adapterPosition
@@ -51,23 +54,31 @@ class EventAdapter(private val eventList: ArrayList<EventModel>) : RecyclerView.
             builder.setItems(arrayOf("Share Name, Date, Time, and Club", "Share Details")) { dialog, which ->
                 when (which) {
                     0 -> {
-                        // Share Name, Date, Time, and Club via Text Message
-                        val intent = Intent(Intent.ACTION_VIEW)
-                        intent.data = Uri.parse("sms:")
-                        val message = "Title: ${event.name}\n" +
-                                "Date: ${viewHolder.dateView.text}\n" +
-                                "Time: ${viewHolder.timeView.text}\n" +
-                                "Club Name: ${event.club}"
-                        intent.putExtra("sms_body", message)
-                        itemView.context.startActivity(Intent.createChooser(intent, "Choose a Text Messaging app"))
+                        // Share Name, Date, Time, and Club
+                        val sendIntent: Intent = Intent().apply {
+                            action = Intent.ACTION_SEND
+                            val message = "Title: ${event.name}\n" +
+                            "Date: ${viewHolder.dateView.text}\n" +
+                            "Time: ${viewHolder.timeView.text}\n" +
+                            "Club Name: ${event.club}"
+                            putExtra(Intent.EXTRA_TEXT, message)
+                            type = "text/plain"
+                        }
+
+                        val shareIntent = Intent.createChooser(sendIntent, null)
+                        context.startActivity(shareIntent)
                     }
                     1 -> {
-                        // Share Details via Text Message
-                        val intent = Intent(Intent.ACTION_VIEW)
-                        intent.data = Uri.parse("sms:")
-                        val message = "Details: ${event.details}"
-                        intent.putExtra("sms_body", message)
-                        itemView.context.startActivity(Intent.createChooser(intent, "Choose a Text Messaging app"))
+                        // Share Details
+                        val sendIntent: Intent = Intent().apply {
+                            action = Intent.ACTION_SEND
+                            val message = "Details: ${event.details}\n"
+                            putExtra(Intent.EXTRA_TEXT, message)
+                            type = "text/plain"
+                        }
+
+                        val shareIntent = Intent.createChooser(sendIntent, null)
+                        context.startActivity(shareIntent)
                     }
                 }
             }

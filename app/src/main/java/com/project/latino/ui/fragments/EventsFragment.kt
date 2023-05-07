@@ -49,31 +49,35 @@ class EventFragment : Fragment(), EventAdapter.OnShareButtonClickListener {
             val instance= AppDatabase.getInstance(requireContext())
             var sortedEvents= ArrayList<EventModel>(instance?.eventDao()!!.getAllEvents())
             var clubsList= ArrayList<ClubModel>(instance?.clubDao()!!.getAllClubs())
-            if(sortedEvents.size<4)
+            if(true)
             {
                 sortedEvents.clear()
                 instance.eventDao().deleteAll()
                 val pictures = ArrayList(listOf(R.drawable.rio, R.drawable.rio, R.drawable.rio))
-                var date=Calendar.getInstance()
+                var date1=Calendar.getInstance()
+                var date2=Calendar.getInstance()
+                var date3=Calendar.getInstance()
+                var date4=Calendar.getInstance()
+
                 var time=Calendar.getInstance()
                 time.set(Calendar.HOUR_OF_DAY, 20)
                 time.set(Calendar.MINUTE, 0)
                 time.set(Calendar.SECOND, 0)
-                date.set(2024, Calendar.JUNE, 20)
+                date1.set(2023, Calendar.APRIL, 20)
                 sortedEvents.add(
-                    EventModel(1,date,time,"Palladium Party","details",pictures,clubsList[0].clubID)
+                    EventModel(1,date1,time,"Palladium Party","details",pictures,clubsList[0].clubID)
                 )
-                date.set(2024, Calendar.JUNE, 26)
+                date2.set(2024, Calendar.DECEMBER, 26)
                 sortedEvents.add(
-                    EventModel(2,date,time,"Kiz Party","details",pictures,clubsList[0].clubID)
+                    EventModel(2,date2,time,"Kiz Party","details",pictures,clubsList[0].clubID)
                 )
-                date.set(2024, Calendar.JUNE, 28)
+                date3.set(2024, Calendar.FEBRUARY, 28)
                 sortedEvents.add(
-                    EventModel(3,date,time,"Latin Experience","details",pictures,clubsList[1].clubID)
+                    EventModel(3,date3,time,"Latin Experience","details",pictures,clubsList[1].clubID)
                 )
-                date.set(2024, Calendar.JULY, 4)
+                date4.set(2023, Calendar.MAY, 7)
                 sortedEvents.add(
-                    EventModel(4,date,time,"Q-Ban Project","details",pictures,clubsList[1].clubID)
+                    EventModel(4,date4,time,"Q-Ban Project","details",pictures,clubsList[1].clubID)
                 )
                 for(e in sortedEvents)
                 {
@@ -81,6 +85,7 @@ class EventFragment : Fragment(), EventAdapter.OnShareButtonClickListener {
                     instance.eventDao().insertEvent(e)
                 }
             }
+
             eventRecyclerView.adapter = EventAdapter(sortedEvents)
         }
 

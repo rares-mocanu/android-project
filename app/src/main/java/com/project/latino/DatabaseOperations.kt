@@ -101,8 +101,9 @@ interface ClubDao {
 }
 @Dao
 interface EventDao{
-    @Query("SELECT * FROM event_item")
-    suspend fun getAllEvents():List<EventModel>
+    @Query("SELECT * FROM event_item ORDER BY date ASC")
+    suspend fun getAllEvents(): List<EventModel>
+
 
     @Query("SELECT * FROM event_item WHERE club = :club")
     suspend fun getEventsOfClub(club: String):List<EventModel>
