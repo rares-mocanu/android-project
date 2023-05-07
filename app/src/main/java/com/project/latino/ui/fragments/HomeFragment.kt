@@ -56,6 +56,11 @@ class HomeFragment : Fragment() {
                  findNavController().navigate(R.id.navigation_events)
                 activity?.findViewById<BottomNavigationView>(R.id.nav_view)?.menu?.findItem(R.id.navigation_events)?.isChecked = true
             }
+            "Map" -> {
+                findNavController().navigate(R.id.navigation_map)
+                activity?.findViewById<BottomNavigationView>(R.id.nav_view)?.menu?.findItem(R.id.navigation_map)?.isChecked = true
+
+            }
         }
     }
 
