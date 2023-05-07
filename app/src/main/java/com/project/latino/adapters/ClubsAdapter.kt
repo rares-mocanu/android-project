@@ -5,10 +5,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.project.latino.AppDatabase
 import com.project.latino.R
 import com.project.latino.models.ClubModel
+import com.project.latino.models.EventModel
+import com.project.latino.ui.fragments.ClubsFragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.newCoroutineContext
+import kotlinx.coroutines.withContext
 
 class ClubsAdapter (private val clubslist: ArrayList<ClubModel>) : RecyclerView.Adapter<ClubsAdapter.ClubViewHolder>() {
 
@@ -34,6 +43,11 @@ class ClubsAdapter (private val clubslist: ArrayList<ClubModel>) : RecyclerView.
         holder.imageView.setImageResource(currentclub.logo)
         val layoutManager = LinearLayoutManager(holder.clubeventlist.context)
         holder.clubeventlist.layoutManager = layoutManager
-        holder.clubeventlist.adapter = ClubEventAdapter(currentclub.events)
+        CoroutineScope(Dispatchers.Main).launch{
+            val instance= AppDatabase.getInstance(holder.itemView.context)
+            var eventlist= ArrayList<EventModel>(instance?.eventDao()!!.getEventsOfClub(currentclub.name))
+            holder.clubeventlist.adapter = ClubEventAdapter(eventlist)
+        }
+
     }
 }

@@ -41,6 +41,7 @@ class SchoolFragment : Fragment() {
             var schools= ArrayList<SchoolModel>(instance?.schoolDao()!!.getAllSchools())
             if(schools.size<2)
                 {
+                instance.schoolDao().deleteAll()
                     var trainers = ArrayList<String>()
                     trainers.addAll(listOf("Petru", "Sandra", "Ilias", "Allana"))
                     schools.add(SchoolModel(1, "La Puerta", trainers, R.drawable.lapuerta))

@@ -44,14 +44,11 @@ class ClubsFragment : Fragment() {
             var clubsList= ArrayList<ClubModel>(instance?.clubDao()!!.getAllClubs())
             if(clubsList.size<2)
             {
-                var clubEventsList =  ArrayList<String>()
-                clubEventsList.addAll(listOf("Palladium party","Kiz party"))
-                clubsList.add(ClubModel(0,"Rio",clubEventsList,R.drawable.rio))
-                clubEventsList =  ArrayList<String>()
-                clubEventsList.addAll(listOf("Latin Experience","Q-Ban Project"))
-                clubsList.add(ClubModel(1,"V Lounge",clubEventsList,R.drawable.latinexperience))
-                instance.clubDao().insertClub(clubsList[0])
-                instance.clubDao().insertClub(clubsList[0])
+                instance.clubDao().deleteAll()
+                clubsList.add(ClubModel(0,"Rio",R.drawable.rio))
+                instance.clubDao().insertClub(ClubModel(0,"Rio",R.drawable.rio))
+                clubsList.add(ClubModel(1,"V Lounge",R.drawable.latinexperience))
+                instance.clubDao().insertClub(ClubModel(1,"V Lounge",R.drawable.latinexperience))
             }
             clubsRecyclerView.adapter = ClubsAdapter(clubsList)
         }

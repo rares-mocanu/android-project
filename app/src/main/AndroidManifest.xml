@@ -10,6 +10,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.LatinoCommunity"
+        android:configChanges="orientation|screenSize"
+        android:screenOrientation="sensor"
         tools:targetApi="31">
 
         <activity

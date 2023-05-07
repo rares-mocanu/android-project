@@ -11,8 +11,6 @@ data class ClubModel(
     var clubID: Int,
     @ColumnInfo(name = "name")
     var name: String,
-    @ColumnInfo(name = "events")
-    var events : ArrayList<String>,
     @ColumnInfo(name = "logo")
     var logo : Int
     )
