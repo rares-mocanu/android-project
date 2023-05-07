@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.navigation_events)
         }
         else {
+            navController.popBackStack()
             navController.navigate(R.id.navigation_home)
         }
     }

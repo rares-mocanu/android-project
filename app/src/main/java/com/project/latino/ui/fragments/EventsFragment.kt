@@ -75,7 +75,7 @@ class EventFragment : Fragment(), EventAdapter.OnShareButtonClickListener {
                 sortedEvents.add(
                     EventModel(3,date3,time,"Latin Experience","details",pictures,clubsList[1].clubID)
                 )
-                date4.set(2023, Calendar.MAY, 5)
+                date4.set(2023, Calendar.MAY, 7)
                 sortedEvents.add(
                     EventModel(4,date4,time,"Q-Ban Project","details",pictures,clubsList[1].clubID)
                 )
