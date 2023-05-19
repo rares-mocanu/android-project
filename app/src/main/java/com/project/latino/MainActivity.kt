@@ -84,19 +84,6 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-//        // Check if the activity was started by clicking on the notification
-//        val notificationClick = intent.getBooleanExtra("NOTIFICATION_CLICK", false)
-//
-//        if (notificationClick) {
-//            // Navigate to the Events fragment
-//            //navController.popBackStack()
-//            navController.navigate(R.id.navigation_events)
-//        } else {
-//            // Navigate to the Home fragment
-//            //doesnt work
-//            navController.navigate(R.id.navigation_home)
-//            //doesnt work
-//        }
 
         // Send notification if current date matches an event date
         CoroutineScope(Dispatchers.Main).launch {

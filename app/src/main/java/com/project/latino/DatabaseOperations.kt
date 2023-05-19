@@ -106,7 +106,7 @@ interface EventDao{
 
 
     @Query("SELECT * FROM event_item WHERE club = :club")
-    suspend fun getEventsOfClub(club: String):List<EventModel>
+    suspend fun getEventsOfClub(club: Int):List<EventModel>
     @Query("DELETE FROM event_item")
     suspend fun deleteAll()
 
