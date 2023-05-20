@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.project.latino.models.ClubModel
 import com.project.latino.models.EventModel
+import com.project.latino.models.LocationModel
 import com.project.latino.models.SchoolModel
 import java.lang.reflect.Type
 import java.util.Calendar
@@ -45,13 +46,14 @@ class Converters{
     fun jsonToCalendar(value: String) : Calendar = Gson().fromJson(value,calendartype)
 }
 
-@Database(entities = [SchoolModel::class,ClubModel::class,EventModel::class],version=2, exportSchema = false)
+@Database(entities = [SchoolModel::class,ClubModel::class,EventModel::class,LocationModel::class],version=3, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase(){
     abstract fun schoolDao(): SchoolDao
     abstract fun clubDao(): ClubDao
 
     abstract fun eventDao(): EventDao
+    abstract fun locationDao(): LocationDao
     companion object{
         private var INSTANCE : AppDatabase?=null
         fun getInstance(context: Context) : AppDatabase?{
@@ -116,5 +118,22 @@ interface EventDao{
     @Delete
     suspend fun deleteEvent(event:EventModel)
 
+
+}
+
+@Dao
+interface LocationDao{
+    @Query("SELECT * FROM location_item")
+    suspend fun getAllWaypoints():List<LocationModel>
+    @Query("DELETE FROM location_item")
+    suspend fun deleteAll()
+
+    @Query("SELECT * FROM location_item where waypointID = :id")
+    suspend fun getWaypointOfId(id :Int):List<LocationModel>
+    @Insert
+    suspend fun insertWaypoint(location: LocationModel)
+
+    @Delete
+    suspend fun deleteWaypoint(location: LocationModel)
 
 }

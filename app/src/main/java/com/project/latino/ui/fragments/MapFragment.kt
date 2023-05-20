@@ -16,8 +16,15 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.project.latino.AppDatabase
 import com.project.latino.R
 import com.project.latino.databinding.FragmentMapsBinding
+import com.project.latino.models.LocationModel
+import com.project.latino.models.SchoolModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MapFragment : Fragment(), OnMapReadyCallback {
 
@@ -72,26 +79,44 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         ){
             currentLocation = LatLng(44.417805, 26.098794)
-            println("no location available")
-            println(googleMap.cameraPosition)
-            println(currentLocation)
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
-            println(googleMap.cameraPosition)
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 13f))
         } else {
-            println("permission granted")
             // Permission has already been granted
             // Get the user's current location
             fusedLocationClient.lastLocation.addOnSuccessListener { location :android.location.Location ->
                     currentLocation = LatLng(location.latitude, location.longitude)
-                    println(googleMap.cameraPosition)
-                    println(currentLocation)
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
-                 println(googleMap.cameraPosition)
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 13f))
 
             }
         }
+        CoroutineScope(Dispatchers.Main).launch {
+            val instance = AppDatabase.getInstance(requireContext())
+            var waypoints = ArrayList<LocationModel>(instance?.locationDao()!!.getAllWaypoints())
+            if(waypoints.size !=2){
+                waypoints.clear()
+                waypoints.add(LocationModel(1,"La Puerta",
+                        44.450823944678234, 26.100612061664595,
+                    "La Puerta Dance Studio"
+                ))
+                waypoints.add(LocationModel(2,"Conexion",
+                    44.43564544135487, 26.094682528572854,
+                    "Conexion Dance School"
+                ))
+                instance.locationDao().deleteAll()
+                instance.locationDao().insertWaypoint(waypoints[0])
+                instance.locationDao().insertWaypoint(waypoints[1])
+            }
+            for(waypoint in waypoints)
+            {
+                googleMap.addMarker(MarkerOptions()
+                    .title(waypoint.name)
+                    .position(LatLng(waypoint.lat,waypoint.lng))
+                    .snippet(waypoint.desc)
+                )
+            }
+        }
 
-    }
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
