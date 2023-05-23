@@ -69,8 +69,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         // You can customize the map here
         // Initialize fused location client
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-        println(ActivityCompat.checkSelfPermission(requireContext(),
-            android.Manifest.permission.ACCESS_FINE_LOCATION) )
 
         // Check if the user has granted location permission
         if ((ActivityCompat.checkSelfPermission(requireContext(),
@@ -83,29 +81,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         } else {
             // Permission has already been granted
             // Get the user's current location
-            fusedLocationClient.lastLocation.addOnSuccessListener { location :android.location.Location ->
-                    currentLocation = LatLng(location.latitude, location.longitude)
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 13f))
+            fusedLocationClient.lastLocation.addOnSuccessListener { location :android.location.Location? ->
 
+                currentLocation = if(location!=null) LatLng(location.latitude, location.longitude)
+                else LatLng(44.417805, 26.098794)
+
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 13f))
             }
         }
         CoroutineScope(Dispatchers.Main).launch {
             val instance = AppDatabase.getInstance(requireContext())
             var waypoints = ArrayList<LocationModel>(instance?.locationDao()!!.getAllWaypoints())
-            if(waypoints.size !=2){
-                waypoints.clear()
-                waypoints.add(LocationModel(1,"La Puerta",
-                        44.450823944678234, 26.100612061664595,
-                    "La Puerta Dance Studio"
-                ))
-                waypoints.add(LocationModel(2,"Conexion",
-                    44.43564544135487, 26.094682528572854,
-                    "Conexion Dance School"
-                ))
-                instance.locationDao().deleteAll()
-                instance.locationDao().insertWaypoint(waypoints[0])
-                instance.locationDao().insertWaypoint(waypoints[1])
-            }
             for(waypoint in waypoints)
             {
                 googleMap.addMarker(MarkerOptions()
