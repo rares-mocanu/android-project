@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun initializeDatabase() {
+    private fun initializeDatabase() {
         CoroutineScope(Dispatchers.Main).launch {
             val instance = AppDatabase.getInstance(this@MainActivity)
             if (instance!=null) {
@@ -180,7 +180,7 @@ class MainActivity : AppCompatActivity() {
                 sortedEvents.add(
                     EventModel(3,date.clone() as Calendar,time,"Latin Experience","details",pictures,clubsList[1].clubID)
                 )
-                date.set(2023, Calendar.MAY, 7)
+                date.set(2023, Calendar.MAY, 24)
                 sortedEvents.add(
                     EventModel(4,date.clone() as Calendar,time,"Q-Ban Project","details",pictures,clubsList[1].clubID)
                 )
