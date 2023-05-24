@@ -18,6 +18,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -25,7 +26,10 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.project.latino.databinding.ActivityMainBinding
+import com.project.latino.models.ClubModel
 import com.project.latino.models.EventModel
+import com.project.latino.models.LocationModel
+import com.project.latino.models.SchoolModel
 import com.project.latino.ui.fragments.EventFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -69,6 +73,8 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        initializeDatabase()
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Create the NotificationChannel
             val name = "My App Channel"
@@ -84,19 +90,6 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-//        // Check if the activity was started by clicking on the notification
-//        val notificationClick = intent.getBooleanExtra("NOTIFICATION_CLICK", false)
-//
-//        if (notificationClick) {
-//            // Navigate to the Events fragment
-//            //navController.popBackStack()
-//            navController.navigate(R.id.navigation_events)
-//        } else {
-//            // Navigate to the Home fragment
-//            //doesnt work
-//            navController.navigate(R.id.navigation_home)
-//            //doesnt work
-//        }
 
         // Send notification if current date matches an event date
         CoroutineScope(Dispatchers.Main).launch {
@@ -142,6 +135,74 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun initializeDatabase() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val instance = AppDatabase.getInstance(this@MainActivity)
+            if (instance!=null) {
+                instance.locationDao().deleteAll()
+                instance.eventDao().deleteAll()
+                instance.clubDao().deleteAll()
+                instance.schoolDao().deleteAll()
+
+                var schools = ArrayList<SchoolModel>()
+                var trainers = ArrayList<String>()
+                trainers.addAll(listOf("Petru", "Sandra", "Ilias", "Allana"))
+                schools.add(SchoolModel(1, "La Puerta", trainers, R.drawable.lapuerta))
+                trainers = ArrayList<String>()
+                trainers.addAll(listOf("Dana", "Dimitrie", "Marius", "Agata"))
+                schools.add(SchoolModel(2, "Conexion", trainers, 0))
+                instance.schoolDao().insertSchool(schools[0])
+                instance.schoolDao().insertSchool(schools[1])
+
+                var clubsList = ArrayList<ClubModel>()
+                clubsList.add(ClubModel(1, "Rio", R.drawable.rio))
+                clubsList.add(ClubModel(2, "V Lounge", R.drawable.latinexperience))
+                instance.clubDao().insertClub(clubsList[0])
+                instance.clubDao().insertClub(clubsList[1])
+
+                var sortedEvents= ArrayList<EventModel>()
+                val pictures = ArrayList(listOf(R.drawable.rio, R.drawable.rio, R.drawable.rio))
+                var date=Calendar.getInstance()
+                var time=Calendar.getInstance()
+                time.set(Calendar.HOUR_OF_DAY, 20)
+                time.set(Calendar.MINUTE, 0)
+                time.set(Calendar.SECOND, 0)
+                date.set(2023, Calendar.APRIL, 20)
+                sortedEvents.add(
+                    EventModel(1,date.clone() as Calendar,time,"Palladium Party","details",pictures,clubsList[0].clubID)
+                )
+                date.set(2024, Calendar.DECEMBER, 26)
+                sortedEvents.add(
+                    EventModel(2,date.clone() as Calendar,time,"Kiz Party","details",pictures,clubsList[0].clubID)
+                )
+                date.set(2024, Calendar.FEBRUARY, 28)
+                sortedEvents.add(
+                    EventModel(3,date.clone() as Calendar,time,"Latin Experience","details",pictures,clubsList[1].clubID)
+                )
+                date.set(2023, Calendar.MAY, 24)
+                sortedEvents.add(
+                    EventModel(4,date.clone() as Calendar,time,"Q-Ban Project","details",pictures,clubsList[1].clubID)
+                )
+                for(e in sortedEvents) { instance.eventDao().insertEvent(e) }
+
+                var waypoints = ArrayList<LocationModel>()
+                waypoints.add(
+                    LocationModel(1,"La Puerta",
+                    44.450823944678234, 26.100612061664595,
+                    "La Puerta Dance Studio"))
+                waypoints.add(
+                    LocationModel(2,"Conexion",
+                    44.43564544135487, 26.094682528572854,
+                    "Conexion Dance School"))
+                instance.locationDao().insertWaypoint(waypoints[0])
+                instance.locationDao().insertWaypoint(waypoints[1])
+
+                }
+
+        }
+    }
+
 
 
     override fun onSupportNavigateUp(): Boolean {

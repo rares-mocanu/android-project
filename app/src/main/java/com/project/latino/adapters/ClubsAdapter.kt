@@ -45,7 +45,8 @@ class ClubsAdapter (private val clubslist: ArrayList<ClubModel>) : RecyclerView.
         holder.clubeventlist.layoutManager = layoutManager
         CoroutineScope(Dispatchers.Main).launch{
             val instance= AppDatabase.getInstance(holder.itemView.context)
-            var eventlist= ArrayList<EventModel>(instance?.eventDao()!!.getEventsOfClub(currentclub.name))
+            var eventlist= ArrayList<EventModel>(instance?.eventDao()!!.getEventsOfClub(currentclub.clubID))
+            println(eventlist)
             holder.clubeventlist.adapter = ClubEventAdapter(eventlist)
         }
 

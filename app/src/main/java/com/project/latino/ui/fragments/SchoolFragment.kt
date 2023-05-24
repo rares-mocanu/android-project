@@ -39,19 +39,7 @@ class SchoolFragment : Fragment() {
         CoroutineScope(Dispatchers.Main).launch{
             val instance=AppDatabase.getInstance(requireContext())
             var schools= ArrayList<SchoolModel>(instance?.schoolDao()!!.getAllSchools())
-            if(schools.size<2)
-                {
-                instance.schoolDao().deleteAll()
-                    var trainers = ArrayList<String>()
-                    trainers.addAll(listOf("Petru", "Sandra", "Ilias", "Allana"))
-                    schools.add(SchoolModel(1, "La Puerta", trainers, R.drawable.lapuerta))
-                    trainers = ArrayList<String>()
-                    trainers.addAll(listOf("Dana", "Dimitrie", "Marius", "Agata"))
-                    schools.add(SchoolModel(2, "Conexion", trainers, 0))
-                    instance.schoolDao().insertSchool(schools[0])
-                    instance.schoolDao().insertSchool(schools[1])
-                }
-                schoolRecycler.adapter = SchoolAdapter(schools)
+            schoolRecycler.adapter = SchoolAdapter(schools)
         }
         val searchText=binding.schoolSearchText
         val searchbutton = binding.schoolSearchButton

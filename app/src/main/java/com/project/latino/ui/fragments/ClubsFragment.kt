@@ -42,14 +42,6 @@ class ClubsFragment : Fragment() {
         CoroutineScope(Dispatchers.Main).launch{
             val instance= AppDatabase.getInstance(requireContext())
             var clubsList= ArrayList<ClubModel>(instance?.clubDao()!!.getAllClubs())
-            if(clubsList.size<2)
-            {
-                instance.clubDao().deleteAll()
-                clubsList.add(ClubModel(0,"Rio",R.drawable.rio))
-                instance.clubDao().insertClub(ClubModel(0,"Rio",R.drawable.rio))
-                clubsList.add(ClubModel(1,"V Lounge",R.drawable.latinexperience))
-                instance.clubDao().insertClub(ClubModel(1,"V Lounge",R.drawable.latinexperience))
-            }
             clubsRecyclerView.adapter = ClubsAdapter(clubsList)
         }
 
